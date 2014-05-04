@@ -1,0 +1,41 @@
+# depslib dependency file v1.0
+1399217306 source:j:\cpp\.cbp\node_1\main.c
+	"stdio.h"
+	"stdlib.h"
+	"conio.h"
+	"stdbool.h"
+	"string.h"
+	"Windows.h"
+	"Winbase.h"
+	"time.h"
+
+1398077465 j:\cpp\.cbp\node_1\stdafx.h
+	"midp.h"
+	"find.h"
+	"free.h"
+
+1398077466 j:\cpp\.cbp\node_1\midp.h
+	<stdio.h>
+	<stdlib.h>
+	<conio.h>
+	<stdbool.h>
+	<string.h>
+
+1398077446 j:\cpp\.cbp\node_1\find.h
+	<stdio.h>
+	<stdlib.h>
+	<conio.h>
+	<stdbool.h>
+	<string.h>
+
+1398077423 j:\cpp\.cbp\node_1\free.h
+	<stdio.h>
+	<stdlib.h>
+	<conio.h>
+
+1399217474 source:j:\cpp\.cbp\node_1\main(unix).c
+	"stdio.h"
+	"stdlib.h"
+	"string.h"
+	"time.h"
+
