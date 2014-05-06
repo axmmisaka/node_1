@@ -184,7 +184,8 @@ int main(void)
                         H:Help\n\
                         or insert E to quit the program.\n");
                         printf("Node by AXM_MISAKA20001,DEBUG 1.5\n");
-                        printf("This program is by Creative Commons Attribution-NonCommercial-Cc-NoDeductive 3.0(CC-BY NC ND 3.0)");
+                        printf("This program is by Creative Commons Attribution-NonCommercial-Cc-NoDeductive 3.0(CC-BY NC ND 3.0)\n");
+                        printf("Problem:When deleting\\adding a node,if you input a position bigger than count of the node,it will add\\delete the end of the node.\n");
                         break;
                     }
         #ifdef DEBUG
