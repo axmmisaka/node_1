@@ -5,4 +5,9 @@ I am AXM_MISAKA20001 and I just finish this program.
 It allows you control one node.
 Have fun!
 百度ID:被袭胸的炮姐
-Node
+Ver 1.5
+在原有基础上:
+接受C语言吧菊苣儿吞薯条的意见:
+0.建立三个符号SUCCESS,FAILED1,FAILED2,用来让main()接受各函数返回值(需要返回链表头的我就让他多了个int * returnv),让函数只干活,I/O任务主要交给main()完成(print()和Flocation()除外).
+1.让question()里的字符串直接初始化,改成const char,不使用strcpy赋值
+2.修复了delnode()中如果输入位置大于链表长度会指向野指针以发生全程序员都喜闻乐见的事情SIGSEGV.
