@@ -11,7 +11,10 @@
 #include "Winbase.h"
 #include "time.h"
 #define DEBUG
-#define VERSION1_4
+#define VERSION1_5
+#define SUCCESS 0
+#define FAILED1 1
+#define FAILED2 2
 typedef struct node
 {
     int number;
@@ -19,29 +22,44 @@ typedef struct node
     struct node * next;
 }LLIST;
 LLIST * make(void);
-LLIST * insert(LLIST *head,LLIST *newstr,int position);//For inserting node
-LLIST * delnode(LLIST *head,int position);//For deleting node
-int Flocation(LLIST * head);//For find a location of a node
+LLIST * insert(LLIST *head,LLIST *newstr,int position,int * returnv);//For inserting node
+LLIST * delnode(LLIST *head,int position,int * returnv);//For deleting node
+int Flocation(LLIST * head,char select);//For find a location of a node
 int freenode(LLIST * head);//For free the node
 int print(LLIST * head);//Print all nodes
 int question(void);//Optional,for otaku and communists.
 int sortnode(LLIST * head,const int len);//Sort the node by name or number.
-#ifdef VERSION1_4
+#ifdef VERSION1_5
 int main(void)
 {
     int pos;
+    int returnvalve;
     char choice;
     LLIST * original_node,* modify_node;
     SetConsoleTitle("Ass♂We♂Can!");// Change current window title
     Sleep(40);// Ensure window title has been updated.
     printf("Reloading AK47,please wait......\n");
     printf("Node by AXM_MISAKA20001.\n");
-    printf("VER:Alpha 1.4 Debug.\nThis program servers only ONE node.");
+    printf("VER:Alpha 1.5 Debug.\nThis program servers only ONE node.");
+    #ifndef DEBUG
     question();
+    #endif // DEBUG
     original_node=make();
     modify_node = (LLIST*)malloc(sizeof(LLIST));
     while (1)
     {
+        #ifdef DEBUG
+        printf("Please insert:\n\
+            N:Free the original node and make a new node\n\
+            I:Insert a node\n\
+            D:Delete a node in the original node\n\
+            S:Search a node by its name or number\n\
+            P:Print the original node.\n\
+            O:Sort the node by name or number\n\
+            H:Help\n\
+            Q:Test Question\n\
+                or insert E to quit the program.\n");
+        #else
         printf("Please insert:\n\
             N:Free the original node and make a new node\n\
             I:Insert a node\n\
@@ -51,6 +69,7 @@ int main(void)
             O:Sort the node by name or number\n\
             H:Help\n\
                 or insert E to quit the program.\n");
+        #endif
         printf("Input your choice:");
         choice=getch();
         fflush(stdin);
@@ -60,9 +79,14 @@ int main(void)
         case 'N':
         case 'n':
                     {
+                    printf("Are you sure want to free the node?This action cannot cancel.(Y to continue)\n");
+                    choice = getch();
+                    if(choice == 'Y'||choice == 'y')
+                    {
                     pos=freenode(original_node);
-                    if(pos)
+                    (pos==0)?printf("Node freed successfully\n"):printf("Node freed failed.\n");
                     original_node=make();
+                    }
                     break;
                     }
         case 'I':
@@ -76,7 +100,13 @@ int main(void)
                     fflush(stdin);
                     scanf("%d",&pos);
                     fflush(stdin);
-                    original_node = insert(original_node,modify_node,pos);
+                    original_node = insert(original_node,modify_node,pos,&returnvalve);
+                    switch(returnvalve)
+                    {
+                        case FAILED2:{printf("Node is NULL but I help you made it.It's just what you inserted.\n");break;}
+                        case FAILED1:{printf("No match(es) found.\n");break;}
+                        case SUCCESS:{printf("Node inserted successfully.\n");break;}
+                    }
                     break;
                     }
         case 'D':
@@ -85,18 +115,35 @@ int main(void)
                         printf("Input position.input -1 to end mission\n");
                         scanf("%d",&pos);
                         if (pos == -1) break;
-                        original_node = delnode(original_node,pos);
+                        original_node = delnode(original_node,pos,&returnvalve);
+                        switch(returnvalve)
+                        {
+                            case FAILED2:{printf("链表都是空的你叫我删除个锤子\n");break;}
+                            case FAILED1:{printf("给我一空玩意儿干嘛?\n");break;}
+                            case SUCCESS:{printf("Node completely deleted.\n");break;}
+                        }
                         break;
                     }
         case 's':
         case 'S':
                     {
-                        Flocation(original_node);break;
+                        printf("Search a location of a node either using number or using name.(input U to search by number)\n");
+                        choice=getch();
+                        Flocation(original_node,choice);
+                        switch(returnvalve)
+                        {
+                            case FAILED2:{printf("Search completed.\n");break;}
+                            case FAILED1:{printf("Search completed,no match found.\n");break;}
+                            case SUCCESS:{printf("Search completed and task canceled.\n");break;}
+                        }
+                        break;
                     }
         case 'P':
         case 'p':
                     {
-                        print(original_node);break;
+                        pos=print(original_node);
+                        (pos==FAILED1)?printf("R U FUCKING KIDDING ME???\n"):printf("Print successfully.\n");
+                        break;
                     }
         case 'E':
         case 'e':
@@ -122,6 +169,7 @@ int main(void)
                     {
                         for(pos=0,modify_node=original_node;modify_node != NULL;pos++,modify_node=modify_node->next);
                         sortnode(original_node,pos);
+                        break;
                     }
         case 'H':
         case 'h':
@@ -135,9 +183,18 @@ int main(void)
                         O:Sort the node by name or number\n\
                         H:Help\n\
                         or insert E to quit the program.\n");
-                        printf("Node by AXM_MISAKA20001,DEBUG 1.4\n");
+                        printf("Node by AXM_MISAKA20001,DEBUG 1.5\n");
                         printf("This program is by Creative Commons Attribution-NonCommercial-Cc-NoDeductive 3.0(CC-BY NC ND 3.0)");
+                        break;
                     }
+        #ifdef DEBUG
+        case 'Q':
+        case 'q':
+                    {
+                        question();
+                        break;
+                    }
+        #endif // DEBUG
         default:printf("Unknown command!\n");
 
         }
@@ -173,44 +230,44 @@ LLIST* make(void)
 
     }
 }
-LLIST * insert(LLIST *head,LLIST *newstr,int position)
+LLIST * insert(LLIST *head,LLIST *newstr,int position,int * returnv)
 {
     LLIST * temp;
     if(head==NULL)
     {
         head=newstr;
-        printf("Node is NULL but I help you made it.It's just what you inserted.\n");
+        *returnv = FAILED2;
         return head;
     }
     if (position==1)//Get the node to its head
     {
         newstr->next=head;
         head=newstr;
-        printf("Node completely inserted.\n");
+        *returnv = SUCCESS;
         return head;
     }
     for(temp=head;temp->next!=NULL&&position>2;temp=temp->next,--position);//locate the pointer
     {
         if(temp==NULL)
         {
-            printf("No match(es) found.\n");
+            *returnv = FAILED1;
         }
         else
         {
             newstr->next=temp->next;//inserting
             temp->next=newstr;
-            printf("Node completely inserted.\n");
         }
     }
+    *returnv = SUCCESS;
     return head;
 }
-LLIST * delnode(LLIST *head,int position)
+LLIST * delnode(LLIST *head,int position,int * returnv)
 {
     LLIST * temp;
     LLIST * tempdel;
     if(head == NULL)
     {
-        printf("链表都是空的你叫我删除个锤子\n");
+        *returnv = FAILED2;
         return head;
     }
     if (position == 1)
@@ -218,35 +275,32 @@ LLIST * delnode(LLIST *head,int position)
         temp=head;//deleting head
         head=head->next;
         free(temp);
-        printf("Node completely deleted.\n");
+        *returnv = SUCCESS;
         return head;
     }
-    for(temp=head;temp->next!=NULL&&position>2;temp=temp->next,--position);//locate the pointer
+    for(temp=head;(temp->next->next)!=NULL&&position>2;temp=temp->next,--position);//locate the pointer
     {
         if (temp == NULL)
         {
-            printf("给我一空玩意儿干嘛?\n");
+            *returnv = FAILED1;
         }
         else
         {
             tempdel=temp->next;//deleting
             temp->next=tempdel->next;
             free(tempdel);
-            printf("Node completely deleted.\n");
+            *returnv = SUCCESS;
         }
     }
     return head;
 
 }
-int Flocation(LLIST * head)
+int Flocation(LLIST * head,char select)
 {
     LLIST * match;
     match = head;
-    char select;
     bool find = false;
     int w_node=0;
-    printf("Search a location of a node either using number or using name.(input U to search by number)\n");
-    select=getch();
     if (select=='U' || select == 'u')
     {
         int number;
@@ -263,21 +317,18 @@ int Flocation(LLIST * head)
                 select=getch();
                 if(select == 'Y' || select == 'y')
                 {
-                    printf("Search completed and task canceled.\n");
-                    return 0;
+                    return FAILED2;
                 }
             }
             match=match->next;
         }
         if (find)
         {
-            printf("Search completed.\n");
-            return 0;
+            return SUCCESS;
         }
         else
         {
-            printf("Search completed,no match found.\n");
-            return 1;
+            return FAILED1;
         }
     }
     else
@@ -296,21 +347,18 @@ int Flocation(LLIST * head)
                 select=getch();
                 if(select == 'Y' || select == 'y')
                 {
-                    printf("Search completed and task canceled.\n");
-                    return 0;
+                    return FAILED2;
                 }
             }
             match=match->next;
         }
         if (find)
         {
-            printf("Search completed.\n");
-            return 0;
+            return SUCCESS;
         }
         else
         {
-            printf("Search completed,no match found.");
-            return 1;
+            return FAILED1;
         }
     }
 }
@@ -318,7 +366,6 @@ int freenode(LLIST * head)
 {
     LLIST * temp;
     char choice;
-    printf("Are you SURE you want to free the node?This action CANNOT revert.(Y to continue)\n");
     choice = getch();
     if (choice == 'Y'||choice == 'y')
     {
@@ -328,17 +375,15 @@ int freenode(LLIST * head)
             free(head);
             head=temp;
         }
-        printf("Node(s) freed successfully.\n");\
-        return 1;
+        return SUCCESS;
     }
-    return 0;
+    return FAILED1;
 }
 int print(LLIST * head)
 {
     LLIST * temp;
     if (head==NULL)
     {
-        printf("R U FUCKING KIDDING ME???\n");
         return 1;
     }
     for(temp=head;temp!=NULL;temp=temp->next)
@@ -348,17 +393,27 @@ int print(LLIST * head)
         printf("(DEBUG)%p\n",&temp);
     #endif // DEBUG
     }
-    printf("Print successfully.\n");
     return 0;
 }
 int question(void)
 {
     int a;
     char ans[100];
-    LARGE_INTEGER   litmp;
+    LARGE_INTEGER litmp;
     LONGLONG Q;
-    char array[10][2][100];
-    strcpy(array[0][0],"起来,饥寒交迫的奴隶,______.");
+    const char array[10][2][100]={
+                            {"起来,饥寒交迫的奴隶,______.","起来,全世界受苦的人"},
+                            {"恨爹不成刚,__________.","恨妹不成穹"},
+                            {"踏まれた花の,__________.","名前も知らずに"},
+                            {"PX是___化学物质?","剧毒致癌有核辐射能导致全球变暖并能轻易摧毁城市的转基因"},
+                            {"三千预算进卡吧,____________.十核E7装上去,四路泰坦抱回家.","加钱加到十万八"},
+                            {"是谁创造了人类世界?______.","是我们劳动群众"},
+                            {"本文经过________审查认可，可供无产阶级乡民阅读。","共惨国际"},
+                            {"________的人________都相信________，但高达八成的高达八成都高达八成不精确。","高达八成"},
+                            {"炮姐的CP是:","上条当妈"},
+                            {"使吧基友来相会,_______.","我们都爱黑绿皮"},
+                            };
+    /*strcpy(array[0][0],"起来,饥寒交迫的奴隶,______.");
     strcpy(array[0][1],"起来,全世界受苦的人");
     strcpy(array[1][0],"恨爹不成刚,__________.");
     strcpy(array[1][1],"恨妹不成穹");
@@ -377,7 +432,7 @@ int question(void)
     strcpy(array[8][0],"炮姐的CP是:");
     strcpy(array[8][1],"上条当妈");
     strcpy(array[9][0],"使吧基友来相会,_______.");
-    strcpy(array[9][1],"我们都爱黑绿皮");
+    strcpy(array[9][1],"我们都爱黑绿皮");*/
     for(int loop=3;loop > 0;loop--)
     {
         QueryPerformanceCounter(&litmp);
@@ -387,10 +442,14 @@ int question(void)
         printf("Enter the answer of the question:%s\nYou still have %d chances.\n",array[a][0],loop);
         gets(ans);
         if(!strcmp(ans,array[a][1]))
-            return 0;
+            return SUCCESS;
     }
     printf("You wrong for too many times!\n");
+    #ifdef DEBUG
+    return FAILED1;
+    #else // DEBUG
     exit(0);
+    #endif
 }
 int sortnode(LLIST * head,const int len)
 {
@@ -472,7 +531,7 @@ int sortnode(LLIST * head,const int len)
 
         }
     free(arr);
-    return 0;
+    return SUCCESS;
 
 }
 #ifdef VERSION1_1
