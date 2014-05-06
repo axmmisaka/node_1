@@ -1,6 +1,6 @@
 /****************************************************************************************/
 /************Node by AXM_MISAKA20001     Not support on Unix or Older Windows************/
-/****Which means Need c99 support(Many features) and Windows OS(Windows.h&Winbase.h).****/
+/****Which means Need c99 support(Many features)  and Windows OS(Windows.h&Winbase.h)****/
 /****************************************************************************************/
 #include "stdio.h"
 #include "stdlib.h"
