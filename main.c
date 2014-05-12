@@ -58,8 +58,11 @@ int main(void)
     int returnvalve;
     char choice;
     LLIST * original_node,* modify_node;
+    //LLIST * nodes[10];
     SetConsoleTitle("Ass°·We°·Can!");// Change current window title
     Sleep(40);// Ensure window title has been updated.
+   // for (int i = 0;i <= 9;i++)
+   //     nodes[i]=NULL;
     printf("Reloading AK47,please wait......\n");
     printf("Node by AXM_MISAKA20001.\n");
     printf("VER:Alpha 1.5 Debug.\nThis program servers only ONE node.");
@@ -67,6 +70,7 @@ int main(void)
     question();
     #endif // DEBUG
     original_node=make();
+//    nodes[0] = original_node;
     modify_node = (LLIST*)malloc(sizeof(LLIST));
     while (1)
     {
@@ -79,6 +83,7 @@ int main(void)
             P:Print the original node.\n\
             O:Sort the node by name or number\n\
             H:Help\n\
+            C:Choose a node from NCS\n\
             Q:Test Question\n\
                 or insert E to quit the program.\n");
         #else
@@ -89,6 +94,7 @@ int main(void)
             S:Search a node by its name or number\n\
             P:Print the original node.\n\
             O:Sort the node by name or number\n\
+            C:Choose a node from NCS\n\
             H:Help\n\
                 or insert E to quit the program.\n");
         #endif
@@ -210,6 +216,35 @@ int main(void)
                         printf("Problem:When deleting\\adding a node,if you input a position bigger than count of the node,it will add\\delete the end of the node.\n");
                         break;
                     }
+        /*case 'C':
+        case 'c':
+                    {
+                        for(pos=0;nodes[pos]!=NULL;pos++);
+                        printf("You now have %d/10 nodes.\n",pos);
+                        for(int j=0;j<=pos-1;j++)
+                        printf("Name & number of head of No.%d node is %s,%d\n",j,nodes[j]->name,nodes[j]->number);
+                        printf("To control a node,press its number;To add a new node,press a\n");
+                        choice = getch();
+                        if(choice == 'A'||choice == 'a')
+                        {
+                            if(pos == 9)
+                            {
+                                printf("Full.\n");
+                                break;
+                            }
+                             original_node = make();
+                             nodes[pos+1] = original_node;
+                        }
+                        else if
+                            (choice >= '0'&& choice <= '9')
+                        {
+                            original_node = nodes[choice-48];
+                            printf("Done.\n");
+                        }
+                        else
+                            printf("Unknown command!\n");
+                        break;
+                    }*/
         #ifdef DEBUG
         case 'Q':
         case 'q':
