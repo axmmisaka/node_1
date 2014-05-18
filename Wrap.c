@@ -260,109 +260,6 @@ int main(void)
     return 0;
 }
 #endif //VERSION 1_5
-#if defined ROLL
-LLIST* make(void)
-{
-    LLIST *head=NULL,*newnode,*prevnode;
-    int count=0;
-    printf("Type the number and name(Do NOT include space in the name!PROGRAM is NOT support!).Type a enter at their center and type a \"-1\" if you want to quit(so number cannot be -1.\n");
-    while(1)
-    {
-        newnode=(LLIST*)malloc(sizeof(LLIST));
-        newnode->next=NULL;
-        scanf("%d",&(newnode->number));
-        if (newnode->number==-1)//over
-        {
-            newnode ->next = head;
-            return(head);
-        }
-        scanf("%59s",newnode->name);
-        fflush(stdin);
-        count++;
-        #ifdef DEBUG
-        printf("(DEBUG)%d,%s\n",newnode->number,newnode->name);
-        #endif // DEBUG
-        if (count==1)//is head or not
-        {
-            head=prevnode=newnode;
-            newnode->head = true;
-        }
-        else
-        {
-            prevnode->next=newnode;
-            prevnode=newnode;
-            newnode->head = false;
-        }
-
-    }
-}
-#elif defined UD
-LLIST* make(void)
-{
-    LLIST *head=NULL,*newnode,*prevnode;
-    int count=0;
-    printf("Type the number and name(Do NOT include space in the name!PROGRAM is NOT support!).Type a enter at their center and type a \"-1\" if you want to quit(so number cannot be -1.\n");
-    while(1)
-    {
-        newnode=(LLIST*)malloc(sizeof(LLIST));
-        newnode->next=NULL;
-        scanf("%d",&(newnode->number));
-        if (newnode->number==-1)//over
-        {
-            return(head);
-        }
-        scanf("%59s",newnode->name);
-        fflush(stdin);
-        count++;
-        #ifdef DEBUG
-        printf("(DEBUG)%d,%s\n",newnode->number,newnode->name);
-        #endif // DEBUG
-        if (count==1)//is head or not
-        {
-            head=prevnode=newnode;
-            newnode->prev = NULL;
-        }
-        else
-        {
-            prevnode->next = newnode;
-            newnode->prev = prevnode;
-            prevnode=newnode;
-        }
-
-    }
-}
-#else
-LLIST* make(void)
-{
-    LLIST *head=NULL,*newnode,*prevnode;
-    int count=0;
-    printf("Type the number and name(Do NOT include space in the name!PROGRAM is NOT support!).Type a enter at their center and type a \"-1\" if you want to quit(so number cannot be -1.\n");
-    while(1)
-    {
-        newnode=(LLIST*)malloc(sizeof(LLIST));
-        newnode->next=NULL;
-        scanf("%d",&(newnode->number));
-        if (newnode->number==-1)//over
-        {
-            return(head);
-        }
-        scanf("%59s",newnode->name);
-        fflush(stdin);
-        count++;
-        #ifdef DEBUG
-        printf("(DEBUG)%d,%s\n",newnode->number,newnode->name);
-        #endif // DEBUG
-        if (count==1)//is head or not
-            head=prevnode=newnode;
-        else
-        {
-            prevnode->next=newnode;
-            prevnode=newnode;
-        }
-
-    }
-}
-#endif // ROLL/UD/NORMAL
 
 LLIST * insert(LLIST *head,LLIST *newstr,int position,int * returnv)
 {
@@ -478,40 +375,7 @@ int sortnode(LLIST * head,const int len)
     return SUCCESS;
 
 }
-LLIST * delnode(LLIST *head,int position,int * returnv)
-{
-    LLIST * temp;
-    LLIST * tempdel;
-    if(head == NULL)
-    {
-        *returnv = FAILED2;
-        return head;
-    }
-    if (position == 1)
-    {
-        temp=head;//deleting head
-        head=head->next;
-        free(temp);
-        *returnv = SUCCESS;
-        return head;
-    }
-    for(temp=head;(temp->next->next)!=NULL&&position>2;temp=temp->next,--position);//locate the pointer
-    {
-        if (temp == NULL)
-        {
-            *returnv = FAILED1;
-        }
-        else
-        {
-            tempdel=temp->next;//deleting
-            temp->next=tempdel->next;
-            free(tempdel);
-            *returnv = SUCCESS;
-        }
-    }
-    return head;
 
-}
 int Flocation(LLIST * head,char select)
 {
     LLIST * match;
@@ -668,3 +532,140 @@ int question(void)
     exit(0);
     #endif
 }
+LLIST * delnode(LLIST *head,int position,int * returnv)
+{
+    LLIST * temp;
+    LLIST * tempdel;
+    if(head == NULL)
+    {
+        *returnv = FAILED2;
+        return head;
+    }
+    if (position == 1)
+    {
+        temp=head;//deleting head
+        head=head->next;
+        free(temp);
+        *returnv = SUCCESS;
+        return head;
+    }
+    for(temp=head;(temp->next->next)!=NULL&&position>2;temp=temp->next,--position);//locate the pointer
+    {
+        if (temp == NULL)
+        {
+            *returnv = FAILED1;
+        }
+        else
+        {
+            tempdel=temp->next;//deleting
+            temp->next=tempdel->next;
+            free(tempdel);
+            *returnv = SUCCESS;
+        }
+    }
+    return head;
+
+}
+#if defined ROLL
+LLIST* make(void)
+{
+    LLIST *head=NULL,*newnode,*prevnode;
+    int count=0;
+    printf("Type the number and name(Do NOT include space in the name!PROGRAM is NOT support!).Type a enter at their center and type a \"-1\" if you want to quit(so number cannot be -1.\n");
+    while(1)
+    {
+        newnode=(LLIST*)malloc(sizeof(LLIST));
+        newnode->next=NULL;
+        scanf("%d",&(newnode->number));
+        if (newnode->number==-1)//over
+        {
+            newnode ->next = head;
+            return(head);
+        }
+        scanf("%59s",newnode->name);
+        fflush(stdin);
+        count++;
+        #ifdef DEBUG
+        printf("(DEBUG)%d,%s\n",newnode->number,newnode->name);
+        #endif // DEBUG
+        if (count==1)//is head or not
+        {
+            head=prevnode=newnode;
+            newnode->head = true;
+        }
+        else
+        {
+            prevnode->next=newnode;
+            prevnode=newnode;
+            newnode->head = false;
+        }
+
+    }
+}
+#elif defined UD
+LLIST* make(void)
+{
+    LLIST *head=NULL,*newnode,*prevnode;
+    int count=0;
+    printf("Type the number and name(Do NOT include space in the name!PROGRAM is NOT support!).Type a enter at their center and type a \"-1\" if you want to quit(so number cannot be -1.\n");
+    while(1)
+    {
+        newnode=(LLIST*)malloc(sizeof(LLIST));
+        newnode->next=NULL;
+        scanf("%d",&(newnode->number));
+        if (newnode->number==-1)//over
+        {
+            return(head);
+        }
+        scanf("%59s",newnode->name);
+        fflush(stdin);
+        count++;
+        #ifdef DEBUG
+        printf("(DEBUG)%d,%s\n",newnode->number,newnode->name);
+        #endif // DEBUG
+        if (count==1)//is head or not
+        {
+            head=prevnode=newnode;
+            newnode->prev = NULL;
+        }
+        else
+        {
+            prevnode->next = newnode;
+            newnode->prev = prevnode;
+            prevnode=newnode;
+        }
+
+    }
+}
+#else
+LLIST* make(void)
+{
+    LLIST *head=NULL,*newnode,*prevnode;
+    int count=0;
+    printf("Type the number and name(Do NOT include space in the name!PROGRAM is NOT support!).Type a enter at their center and type a \"-1\" if you want to quit(so number cannot be -1.\n");
+    while(1)
+    {
+        newnode=(LLIST*)malloc(sizeof(LLIST));
+        newnode->next=NULL;
+        scanf("%d",&(newnode->number));
+        if (newnode->number==-1)//over
+        {
+            return(head);
+        }
+        scanf("%59s",newnode->name);
+        fflush(stdin);
+        count++;
+        #ifdef DEBUG
+        printf("(DEBUG)%d,%s\n",newnode->number,newnode->name);
+        #endif // DEBUG
+        if (count==1)//is head or not
+            head=prevnode=newnode;
+        else
+        {
+            prevnode->next=newnode;
+            prevnode=newnode;
+        }
+
+    }
+}
+#endif // ROLL/UD/NORMAL
