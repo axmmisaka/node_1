@@ -59,7 +59,7 @@ int main(void)
     char choice;
     LLIST * original_node,* modify_node;
     //LLIST * nodes[10];
-    SetConsoleTitle("Ass¡áWe¡áCan!");// Change current window title
+    SetConsoleTitle("Assâ™‚Weâ™‚Can!");// Change current window title
     Sleep(40);// Ensure window title has been updated.
    // for (int i = 0;i <= 9;i++)
    //     nodes[i]=NULL;
@@ -146,8 +146,8 @@ int main(void)
                         original_node = delnode(original_node,pos,&returnvalve);
                         switch(returnvalve)
                         {
-                            case FAILED2:{printf("Á´±í¶¼ÊÇ¿ÕµÄÄã½ÐÎÒÉ¾³ý¸ö´¸×Ó\n");break;}
-                            case FAILED1:{printf("¸øÎÒÒ»¿ÕÍæÒâ¶ù¸ÉÂï?\n");break;}
+                            case FAILED2:{printf("é“¾è¡¨éƒ½æ˜¯ç©ºçš„ä½ å«æˆ‘åˆ é™¤ä¸ªé”¤å­\n");break;}
+                            case FAILED1:{printf("ç»™æˆ‘ä¸€ç©ºçŽ©æ„å„¿å¹²å˜›?\n");break;}
                             case SUCCESS:{printf("Node completely deleted.\n");break;}
                         }
                         break;
@@ -260,109 +260,6 @@ int main(void)
     return 0;
 }
 #endif //VERSION 1_5
-#if defined ROLL
-LLIST* make(void)
-{
-    LLIST *head=NULL,*newnode,*prevnode;
-    int count=0;
-    printf("Type the number and name(Do NOT include space in the name!PROGRAM is NOT support!).Type a enter at their center and type a \"-1\" if you want to quit(so number cannot be -1.\n");
-    while(1)
-    {
-        newnode=(LLIST*)malloc(sizeof(LLIST));
-        newnode->next=NULL;
-        scanf("%d",&(newnode->number));
-        if (newnode->number==-1)//over
-        {
-            newnode ->next = head;
-            return(head);
-        }
-        scanf("%59s",newnode->name);
-        fflush(stdin);
-        count++;
-        #ifdef DEBUG
-        printf("(DEBUG)%d,%s\n",newnode->number,newnode->name);
-        #endif // DEBUG
-        if (count==1)//is head or not
-        {
-            head=prevnode=newnode;
-            newnode->head = true;
-        }
-        else
-        {
-            prevnode->next=newnode;
-            prevnode=newnode;
-            newnode->head = false;
-        }
-
-    }
-}
-#elif defined UD
-LLIST* make(void)
-{
-    LLIST *head=NULL,*newnode,*prevnode;
-    int count=0;
-    printf("Type the number and name(Do NOT include space in the name!PROGRAM is NOT support!).Type a enter at their center and type a \"-1\" if you want to quit(so number cannot be -1.\n");
-    while(1)
-    {
-        newnode=(LLIST*)malloc(sizeof(LLIST));
-        newnode->next=NULL;
-        scanf("%d",&(newnode->number));
-        if (newnode->number==-1)//over
-        {
-            return(head);
-        }
-        scanf("%59s",newnode->name);
-        fflush(stdin);
-        count++;
-        #ifdef DEBUG
-        printf("(DEBUG)%d,%s\n",newnode->number,newnode->name);
-        #endif // DEBUG
-        if (count==1)//is head or not
-        {
-            head=prevnode=newnode;
-            newnode->prev = NULL;
-        }
-        else
-        {
-            prevnode->next = newnode;
-            newnode->prev = prevnode;
-            prevnode=newnode;
-        }
-
-    }
-}
-#else
-LLIST* make(void)
-{
-    LLIST *head=NULL,*newnode,*prevnode;
-    int count=0;
-    printf("Type the number and name(Do NOT include space in the name!PROGRAM is NOT support!).Type a enter at their center and type a \"-1\" if you want to quit(so number cannot be -1.\n");
-    while(1)
-    {
-        newnode=(LLIST*)malloc(sizeof(LLIST));
-        newnode->next=NULL;
-        scanf("%d",&(newnode->number));
-        if (newnode->number==-1)//over
-        {
-            return(head);
-        }
-        scanf("%59s",newnode->name);
-        fflush(stdin);
-        count++;
-        #ifdef DEBUG
-        printf("(DEBUG)%d,%s\n",newnode->number,newnode->name);
-        #endif // DEBUG
-        if (count==1)//is head or not
-            head=prevnode=newnode;
-        else
-        {
-            prevnode->next=newnode;
-            prevnode=newnode;
-        }
-
-    }
-}
-#endif // ROLL/UD/NORMAL
 
 LLIST * insert(LLIST *head,LLIST *newstr,int position,int * returnv)
 {
@@ -395,40 +292,90 @@ LLIST * insert(LLIST *head,LLIST *newstr,int position,int * returnv)
     *returnv = SUCCESS;
     return head;
 }
-LLIST * delnode(LLIST *head,int position,int * returnv)
+int sortnode(LLIST * head,const int len)
 {
+    typedef struct nod
+    {
+        int num;
+        char nam[60];
+    }array;
+    array arr[len];
+    char choice;
+    short flag;
     LLIST * temp;
-    LLIST * tempdel;
-    if(head == NULL)
+    temp = head;
+    char tem[60];
+    for(int loop=0;loop < len;loop++)//Let arr be a copy of LLIST
     {
-        *returnv = FAILED2;
-        return head;
+        arr[loop].num = temp->number;
+        strcpy(arr[loop].nam,temp->name);
+        temp = temp->next;
     }
-    if (position == 1)
+    printf("Do you want to sort by number or by name(U/A)\n");
+    choice=getch();
+    if(choice=='U'||choice=='u')//by number,Bubble sort,an SB sorting
     {
-        temp=head;//deleting head
-        head=head->next;
-        free(temp);
-        *returnv = SUCCESS;
-        return head;
-    }
-    for(temp=head;(temp->next->next)!=NULL&&position>2;temp=temp->next,--position);//locate the pointer
-    {
-        if (temp == NULL)
+        for (int i=0;i<len-1;i++)
         {
-            *returnv = FAILED1;
-        }
-        else
+            flag = 0;
+            for (int j=1;j<len-i;j++)
+            {
+                if (arr[j].num<arr[j-1].num)
+                {
+                    arr[j].num = arr[j].num ^ arr[j-1].num;
+                    arr[j-1].num = arr[j].num ^ arr[j-1].num;
+                    arr[j].num = arr[j].num ^ arr[j-1].num;
+                    strcpy(tem,arr[j].nam);
+                    strcpy(arr[j].nam,arr[j-1].nam);
+                    strcpy(arr[j-1].nam,tem);
+
+                    flag = 1;
+                }
+            }
+             if(flag != 1)
         {
-            tempdel=temp->next;//deleting
-            temp->next=tempdel->next;
-            free(tempdel);
-            *returnv = SUCCESS;
+            break;
         }
-    }
-    return head;
+        }
+
+        }//sort complete
+        if(choice=='A'||choice=='a')//by name,Bubble sort,an SB sorting
+        {
+        for (int i=0;i<len-1;i++)
+        {
+            flag = 0;
+            for (int j=1;j<len-i;j++)
+            {
+                if (strcmp(arr[j].nam,arr[j-1].nam) > 0)
+                {
+                    arr[j].num = arr[j].num ^ arr[j-1].num;
+                    arr[j-1].num = arr[j].num ^ arr[j-1].num;
+                    arr[j].num = arr[j].num ^ arr[j-1].num;
+                    strcpy(tem,arr[j].nam);
+                    strcpy(arr[j].nam,arr[j-1].nam);
+                    strcpy(arr[j-1].nam,tem);
+
+                    flag = 1;
+                }
+                if(flag != 1)
+            {
+                break;
+            }
+            }
+
+        }//sort complete
+        }
+        printf("Sort complete.Printing.\n");
+        for(int loop=0;loop < len;loop++)
+        {
+            printf("%d,%s\n",arr[loop].num,arr[loop].nam);
+
+        }
+    free(arr);
+    return SUCCESS;
 
 }
+
 int Flocation(LLIST * head,char select)
 {
     LLIST * match;
@@ -536,37 +483,37 @@ int question(void)
     LARGE_INTEGER litmp;
     LONGLONG Q;
     const char array[10][2][100]={
-                            {"ÆðÀ´,¼¢º®½»ÆÈµÄÅ«Á¥,______.","ÆðÀ´,È«ÊÀ½çÊÜ¿àµÄÈË"},
-                            {"ºÞµù²»³É¸Õ,__________.","ºÞÃÃ²»³Éñ·"},
-                            {"Ì¤¤Þ¤ì¤¿»¨¤Î,__________.","ÃûÇ°¤âÖª¤é¤º¤Ë"},
-                            {"PXÊÇ___»¯Ñ§ÎïÖÊ?","¾ç¶¾ÖÂ°©ÓÐºË·øÉäÄÜµ¼ÖÂÈ«Çò±äÅ¯²¢ÄÜÇáÒ×´Ý»Ù³ÇÊÐµÄ×ª»ùÒò"},
-                            {"ÈýÇ§Ô¤Ëã½ø¿¨°É,____________.Ê®ºËE7×°ÉÏÈ¥,ËÄÂ·Ì©Ì¹±§»Ø¼Ò.","¼ÓÇ®¼Óµ½Ê®Íò°Ë"},
-                            {"ÊÇË­´´ÔìÁËÈËÀàÊÀ½ç?______.","ÊÇÎÒÃÇÀÍ¶¯ÈºÖÚ"},
-                            {"±¾ÎÄ¾­¹ý________Éó²éÈÏ¿É£¬¿É¹©ÎÞ²ú½×¼¶ÏçÃñÔÄ¶Á¡£","¹²²Ò¹ú¼Ê"},
-                            {"________µÄÈË________¶¼ÏàÐÅ________£¬µ«¸ß´ï°Ë³ÉµÄ¸ß´ï°Ë³É¶¼¸ß´ï°Ë³É²»¾«È·¡£","¸ß´ï°Ë³É"},
-                            {"ÅÚ½ãµÄCPÊÇ:","ÉÏÌõµ±Âè"},
-                            {"Ê¹°É»ùÓÑÀ´Ïà»á,_______.","ÎÒÃÇ¶¼°®ºÚÂÌÆ¤"},
+                            {"èµ·æ¥,é¥¥å¯’äº¤è¿«çš„å¥´éš¶,______.","èµ·æ¥,å…¨ä¸–ç•Œå—è‹¦çš„äºº"},
+                            {"æ¨çˆ¹ä¸æˆåˆš,__________.","æ¨å¦¹ä¸æˆç©¹"},
+                            {"è¸ã¾ã‚ŒãŸèŠ±ã®,__________.","åå‰ã‚‚çŸ¥ã‚‰ãšã«"},
+                            {"PXæ˜¯___åŒ–å­¦ç‰©è´¨?","å‰§æ¯’è‡´ç™Œæœ‰æ ¸è¾å°„èƒ½å¯¼è‡´å…¨çƒå˜æš–å¹¶èƒ½è½»æ˜“æ‘§æ¯åŸŽå¸‚çš„è½¬åŸºå› "},
+                            {"ä¸‰åƒé¢„ç®—è¿›å¡å§,____________.åæ ¸E7è£…ä¸ŠåŽ»,å››è·¯æ³°å¦æŠ±å›žå®¶.","åŠ é’±åŠ åˆ°åä¸‡å…«"},
+                            {"æ˜¯è°åˆ›é€ äº†äººç±»ä¸–ç•Œ?______.","æ˜¯æˆ‘ä»¬åŠ³åŠ¨ç¾¤ä¼—"},
+                            {"æœ¬æ–‡ç»è¿‡________å®¡æŸ¥è®¤å¯ï¼Œå¯ä¾›æ— äº§é˜¶çº§ä¹¡æ°‘é˜…è¯»ã€‚","å…±æƒ¨å›½é™…"},
+                            {"________çš„äºº________éƒ½ç›¸ä¿¡________ï¼Œä½†é«˜è¾¾å…«æˆçš„é«˜è¾¾å…«æˆéƒ½é«˜è¾¾å…«æˆä¸ç²¾ç¡®ã€‚","é«˜è¾¾å…«æˆ"},
+                            {"ç‚®å§çš„CPæ˜¯:","ä¸Šæ¡å½“å¦ˆ"},
+                            {"ä½¿å§åŸºå‹æ¥ç›¸ä¼š,_______.","æˆ‘ä»¬éƒ½çˆ±é»‘ç»¿çš®"},
                             };
-    /*strcpy(array[0][0],"ÆðÀ´,¼¢º®½»ÆÈµÄÅ«Á¥,______.");
-    strcpy(array[0][1],"ÆðÀ´,È«ÊÀ½çÊÜ¿àµÄÈË");
-    strcpy(array[1][0],"ºÞµù²»³É¸Õ,__________.");
-    strcpy(array[1][1],"ºÞÃÃ²»³Éñ·");
-    strcpy(array[2][0],"Ì¤¤Þ¤ì¤¿»¨¤Î,__________.");
-    strcpy(array[2][1],"ÃûÇ°¤âÖª¤é¤º¤Ë");
-    strcpy(array[3][0],"PXÊÇ___»¯Ñ§ÎïÖÊ?");
-    strcpy(array[3][1],"¾ç¶¾ÖÂ°©ÓÐºË·øÉäÄÜµ¼ÖÂÈ«Çò±äÅ¯²¢ÄÜÇáÒ×´Ý»Ù³ÇÊÐµÄ×ª»ùÒò");
-    strcpy(array[4][0],"ÈýÇ§Ô¤Ëã½ø¿¨°É,____________.Ê®ºËE7×°ÉÏÈ¥,ËÄÂ·Ì©Ì¹±§»Ø¼Ò.");
-    strcpy(array[4][1],"¼ÓÇ®¼Óµ½Ê®Íò°Ë");
-    strcpy(array[5][0],"ÊÇË­´´ÔìÁËÈËÀàÊÀ½ç?______.");
-    strcpy(array[5][1],"ÊÇÎÒÃÇÀÍ¶¯ÈºÖÚ");
-    strcpy(array[6][0],"±¾ÎÄ¾­¹ý________Éó²éÈÏ¿É£¬¿É¹©ÎÞ²ú½×¼¶ÏçÃñÔÄ¶Á¡£");
-    strcpy(array[6][1],"¹²²Ò¹ú¼Ê");
-    strcpy(array[7][0],"________µÄÈË________¶¼ÏàÐÅ________£¬µ«¸ß´ï°Ë³ÉµÄ¸ß´ï°Ë³É¶¼¸ß´ï°Ë³É²»¾«È·¡£");
-    strcpy(array[7][1],"¸ß´ï°Ë³É");
-    strcpy(array[8][0],"ÅÚ½ãµÄCPÊÇ:");
-    strcpy(array[8][1],"ÉÏÌõµ±Âè");
-    strcpy(array[9][0],"Ê¹°É»ùÓÑÀ´Ïà»á,_______.");
-    strcpy(array[9][1],"ÎÒÃÇ¶¼°®ºÚÂÌÆ¤");*/
+    /*strcpy(array[0][0],"èµ·æ¥,é¥¥å¯’äº¤è¿«çš„å¥´éš¶,______.");
+    strcpy(array[0][1],"èµ·æ¥,å…¨ä¸–ç•Œå—è‹¦çš„äºº");
+    strcpy(array[1][0],"æ¨çˆ¹ä¸æˆåˆš,__________.");
+    strcpy(array[1][1],"æ¨å¦¹ä¸æˆç©¹");
+    strcpy(array[2][0],"è¸ã¾ã‚ŒãŸèŠ±ã®,__________.");
+    strcpy(array[2][1],"åå‰ã‚‚çŸ¥ã‚‰ãšã«");
+    strcpy(array[3][0],"PXæ˜¯___åŒ–å­¦ç‰©è´¨?");
+    strcpy(array[3][1],"å‰§æ¯’è‡´ç™Œæœ‰æ ¸è¾å°„èƒ½å¯¼è‡´å…¨çƒå˜æš–å¹¶èƒ½è½»æ˜“æ‘§æ¯åŸŽå¸‚çš„è½¬åŸºå› ");
+    strcpy(array[4][0],"ä¸‰åƒé¢„ç®—è¿›å¡å§,____________.åæ ¸E7è£…ä¸ŠåŽ»,å››è·¯æ³°å¦æŠ±å›žå®¶.");
+    strcpy(array[4][1],"åŠ é’±åŠ åˆ°åä¸‡å…«");
+    strcpy(array[5][0],"æ˜¯è°åˆ›é€ äº†äººç±»ä¸–ç•Œ?______.");
+    strcpy(array[5][1],"æ˜¯æˆ‘ä»¬åŠ³åŠ¨ç¾¤ä¼—");
+    strcpy(array[6][0],"æœ¬æ–‡ç»è¿‡________å®¡æŸ¥è®¤å¯ï¼Œå¯ä¾›æ— äº§é˜¶çº§ä¹¡æ°‘é˜…è¯»ã€‚");
+    strcpy(array[6][1],"å…±æƒ¨å›½é™…");
+    strcpy(array[7][0],"________çš„äºº________éƒ½ç›¸ä¿¡________ï¼Œä½†é«˜è¾¾å…«æˆçš„é«˜è¾¾å…«æˆéƒ½é«˜è¾¾å…«æˆä¸ç²¾ç¡®ã€‚");
+    strcpy(array[7][1],"é«˜è¾¾å…«æˆ");
+    strcpy(array[8][0],"ç‚®å§çš„CPæ˜¯:");
+    strcpy(array[8][1],"ä¸Šæ¡å½“å¦ˆ");
+    strcpy(array[9][0],"ä½¿å§åŸºå‹æ¥ç›¸ä¼š,_______.");
+    strcpy(array[9][1],"æˆ‘ä»¬éƒ½çˆ±é»‘ç»¿çš®");*/
     for(int loop=3;loop > 0;loop--)
     {
         QueryPerformanceCounter(&litmp);
@@ -585,125 +532,140 @@ int question(void)
     exit(0);
     #endif
 }
-int sortnode(LLIST * head,const int len)
+LLIST * delnode(LLIST *head,int position,int * returnv)
 {
-    typedef struct nod
-    {
-        int num;
-        char nam[60];
-    }array;
-    array arr[len];
-    char choice;
-    short flag;
     LLIST * temp;
-    temp = head;
-    char tem[60];
-    for(int loop=0;loop < len;loop++)//Let arr be a copy of LLIST
+    LLIST * tempdel;
+    if(head == NULL)
     {
-        arr[loop].num = temp->number;
-        strcpy(arr[loop].nam,temp->name);
-        temp = temp->next;
+        *returnv = FAILED2;
+        return head;
     }
-    printf("Do you want to sort by number or by name(U/A)\n");
-    choice=getch();
-    if(choice=='U'||choice=='u')//by number,Bubble sort,an SB sorting
+    if (position == 1)
     {
-        for (int i=0;i<len-1;i++)
+        temp=head;//deleting head
+        head=head->next;
+        free(temp);
+        *returnv = SUCCESS;
+        return head;
+    }
+    for(temp=head;(temp->next->next)!=NULL&&position>2;temp=temp->next,--position);//locate the pointer
+    {
+        if (temp == NULL)
         {
-            flag = 0;
-            for (int j=1;j<len-i;j++)
-            {
-                if (arr[j].num<arr[j-1].num)
-                {
-                    arr[j].num = arr[j].num ^ arr[j-1].num;
-                    arr[j-1].num = arr[j].num ^ arr[j-1].num;
-                    arr[j].num = arr[j].num ^ arr[j-1].num;
-                    strcpy(tem,arr[j].nam);
-                    strcpy(arr[j].nam,arr[j-1].nam);
-                    strcpy(arr[j-1].nam,tem);
-
-                    flag = 1;
-                }
-            }
-             if(flag != 1)
-        {
-            break;
+            *returnv = FAILED1;
         }
-        }
-
-        }//sort complete
-        if(choice=='A'||choice=='a')//by name,Bubble sort,an SB sorting
+        else
         {
-        for (int i=0;i<len-1;i++)
-        {
-            flag = 0;
-            for (int j=1;j<len-i;j++)
-            {
-                if (strcmp(arr[j].nam,arr[j-1].nam) > 0)
-                {
-                    arr[j].num = arr[j].num ^ arr[j-1].num;
-                    arr[j-1].num = arr[j].num ^ arr[j-1].num;
-                    arr[j].num = arr[j].num ^ arr[j-1].num;
-                    strcpy(tem,arr[j].nam);
-                    strcpy(arr[j].nam,arr[j-1].nam);
-                    strcpy(arr[j-1].nam,tem);
-
-                    flag = 1;
-                }
-                if(flag != 1)
-            {
-                break;
-            }
-            }
-
-        }//sort complete
+            tempdel=temp->next;//deleting
+            temp->next=tempdel->next;
+            free(tempdel);
+            *returnv = SUCCESS;
         }
-        printf("Sort complete.Printing.\n");
-        for(int loop=0;loop < len;loop++)
-        {
-            printf("%d,%s\n",arr[loop].num,arr[loop].nam);
-
-        }
-    free(arr);
-    return SUCCESS;
+    }
+    return head;
 
 }
-#ifdef VERSION1_1
-int main()
+#if defined ROLL
+LLIST* make(void)
 {
-    int pos;
-    LLIST * test,* test1;
-        printf("Node by AXM_MISAKA20001.\n");
-        printf("VER:Alpha 1.1 Debug.\n");
-        printf("Reloading AK47,please wait......\n");
-    test=make();
-    print(test);
-    test1=(LLIST*)malloc(sizeof(LLIST));
-	test1->next = NULL;
-	printf("Node Created\n");
-	scanf("%d",&(test1->number));
-	scanf("%59s",test1->name);
-	fflush(stdin);
-	scanf("%d",&pos);
-	fflush(stdin);
-	test = insert(test,test1,pos);
-	printf("Node inserted\n");
-	print(test);
-	fflush(stdin);
-	scanf("%d",&pos);
-	test = delnode(test,pos);
-	printf("Node Deleted.\n");
-	print(test);
-	Flocation(test);
-	Flocation(test);
-    return 0;
-}
-#endif // DEBUG
+    LLIST *head=NULL,*newnode,*prevnode;
+    int count=0;
+    printf("Type the number and name(Do NOT include space in the name!PROGRAM is NOT support!).Type a enter at their center and type a \"-1\" if you want to quit(so number cannot be -1.\n");
+    while(1)
+    {
+        newnode=(LLIST*)malloc(sizeof(LLIST));
+        newnode->next=NULL;
+        scanf("%d",&(newnode->number));
+        if (newnode->number==-1)//over
+        {
+            newnode ->next = head;
+            return(head);
+        }
+        scanf("%59s",newnode->name);
+        fflush(stdin);
+        count++;
+        #ifdef DEBUG
+        printf("(DEBUG)%d,%s\n",newnode->number,newnode->name);
+        #endif // DEBUG
+        if (count==1)//is head or not
+        {
+            head=prevnode=newnode;
+            newnode->head = true;
+        }
+        else
+        {
+            prevnode->next=newnode;
+            prevnode=newnode;
+            newnode->head = false;
+        }
 
-#ifdef release
-int main(void)
-{
-    printf("Debug Version.");
-    return 0;
+    }
 }
-#endif // release
+#elif defined UD
+LLIST* make(void)
+{
+    LLIST *head=NULL,*newnode,*prevnode;
+    int count=0;
+    printf("Type the number and name(Do NOT include space in the name!PROGRAM is NOT support!).Type a enter at their center and type a \"-1\" if you want to quit(so number cannot be -1.\n");
+    while(1)
+    {
+        newnode=(LLIST*)malloc(sizeof(LLIST));
+        newnode->next=NULL;
+        scanf("%d",&(newnode->number));
+        if (newnode->number==-1)//over
+        {
+            return(head);
+        }
+        scanf("%59s",newnode->name);
+        fflush(stdin);
+        count++;
+        #ifdef DEBUG
+        printf("(DEBUG)%d,%s\n",newnode->number,newnode->name);
+        #endif // DEBUG
+        if (count==1)//is head or not
+        {
+            head=prevnode=newnode;
+            newnode->prev = NULL;
+        }
+        else
+        {
+            prevnode->next = newnode;
+            newnode->prev = prevnode;
+            prevnode=newnode;
+        }
+
+    }
+}
+#else
+LLIST* make(void)
+{
+    LLIST *head=NULL,*newnode,*prevnode;
+    int count=0;
+    printf("Type the number and name(Do NOT include space in the name!PROGRAM is NOT support!).Type a enter at their center and type a \"-1\" if you want to quit(so number cannot be -1.\n");
+    while(1)
+    {
+        newnode=(LLIST*)malloc(sizeof(LLIST));
+        newnode->next=NULL;
+        scanf("%d",&(newnode->number));
+        if (newnode->number==-1)//over
+        {
+            return(head);
+        }
+        scanf("%59s",newnode->name);
+        fflush(stdin);
+        count++;
+        #ifdef DEBUG
+        printf("(DEBUG)%d,%s\n",newnode->number,newnode->name);
+        #endif // DEBUG
+        if (count==1)//is head or not
+            head=prevnode=newnode;
+        else
+        {
+            prevnode->next=newnode;
+            prevnode=newnode;
+        }
+
+    }
+}
+#endif // ROLL/UD/NORMAL
