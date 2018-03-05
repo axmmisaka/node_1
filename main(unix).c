@@ -29,7 +29,7 @@ int main(void)
     char choice;
     LLIST * original_node,* modify_node;
     printf("Reloading AK47,please wait......\n");
-    printf("Node by AXM_MISAKA20001.\n");
+    printf("Node by ###############.\n");
     printf("VER:Alpha 1.4 Debug.\nThis program servers only ONE node.");
     question();
     printf("Please insert:\n\
@@ -138,7 +138,7 @@ int main(void)
                         O:Sort the node by name or number\n\
                         H:Help\n\
                         or insert E to quit the program.\n");
-                        printf("Node by AXM_MISAKA20001,DEBUG 1.4\n");
+                        printf("Node by ###############,DEBUG 1.4\n");
                         printf("This program is by Creative Commons Attribution-NonCommercial-Cc-NoDeductive 3.0(CC-BY NC ND 3.0)");
                     }
         default:printf("Unknown command!\n");
@@ -479,7 +479,7 @@ int main()
 {
     int pos;
     LLIST * test,* test1;
-        printf("Node by AXM_MISAKA20001.\n");
+        printf("Node by ###############.\n");
         printf("VER:Alpha 1.1 Debug.\n");
         printf("Reloading AK47,please wait......\n");
     test=make();
