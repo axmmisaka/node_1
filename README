@@ -9,5 +9,5 @@ Ver 1.5
 0.建立三个符号SUCCESS,FAILED1,FAILED2,用来让main()接受各函数返回值(需要返回链表头的我就让他多了个int * returnv),让函数只干活,I/O任务主要交给main()完成(print()和Flocation()除外).
 1.让question()里的字符串直接初始化,改成const char,不使用strcpy赋值
 2.修复了delnode()中如果输入位置大于链表长度会指向野指针以发生全程序员都喜闻乐见的事情SIGSEGV.
-3.添加了循环链表和双向链表的支持(他妈我都不知道干啥用的).目前只支持make()和空链表.可以通过去掉//Down here,is two Enabler.Just delete "//" to use.Not fully support.下面的任意一个(全去了就是循环)开启.
+3.添加了循环链表和双向链表的支持(我都不知道干啥用的).目前只支持make()和空链表.可以通过去掉//Down here,is two Enabler.Just delete "//" to use.Not fully support.下面的任意一个(全去了就是循环)开启.
 
