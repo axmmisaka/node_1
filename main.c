@@ -39,7 +39,7 @@ int main(void)
     SetConsoleTitle("Ass♂We♂Can!");// Change current window title
     Sleep(40);// Ensure window title has been updated.
     printf("Reloading AK47,please wait......\n");
-    printf("Node by AXM_MISAKA20001.\n");
+    printf("Node by ###############.\n");
     printf("VER:Alpha 1.5 Debug.\nThis program servers only ONE node.");
     #ifndef DEBUG
     question();
@@ -183,7 +183,7 @@ int main(void)
                         O:Sort the node by name or number\n\
                         H:Help\n\
                         or insert E to quit the program.\n");
-                        printf("Node by AXM_MISAKA20001,DEBUG 1.5\n");
+                        printf("Node by ###############,DEBUG 1.5\n");
                         printf("This program is by Creative Commons Attribution-NonCommercial-Cc-NoDeductive 3.0(CC-BY NC ND 3.0)");
                         break;
                     }
@@ -539,7 +539,7 @@ int main()
 {
     int pos;
     LLIST * test,* test1;
-        printf("Node by AXM_MISAKA20001.\n");
+        printf("Node by ###############.\n");
         printf("VER:Alpha 1.1 Debug.\n");
         printf("Reloading AK47,please wait......\n");
     test=make();
